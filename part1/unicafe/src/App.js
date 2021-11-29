@@ -8,6 +8,7 @@ const Header = (props) => {
 };
 
 const Button = (props) => {
+  //console.log(props)
   return (<button onClick={props.counter}>
     <p>{props.text}</p>
   </button>)
