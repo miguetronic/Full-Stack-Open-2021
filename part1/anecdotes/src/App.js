@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 
 const Anecdote = ({ selected, anecdotes }) => {
   return (
-    <p>{anecdotes[selected]}</p>
+    <div>
+      <h1>Anecdote of the day</h1>
+      <p>{anecdotes[selected]}</p>
+    </div>
   )
 };
 
 const DisplayVotes = ({ selected, votes }) => {
-  console.log("Votes current:", selected)
+  //console.log("Votes current:", selected)
   return (
     <p>has {votes[selected]} votes</p>
   )
@@ -18,6 +21,20 @@ const Button = (props) => {
     <button onClick={props.action}>
       {props.text}
     </button>
+  )
+};
+
+const AnecdoteMostVotes = ({ anecdotes, votes }) => {
+  const maxVote = Math.max(...votes)
+  //console.log("Max Vote is:", maxVote)
+  const maxIndex = votes.indexOf(maxVote)
+  //console.log("Max Index of max vote is:", maxIndex)
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[maxIndex]}</p>
+      <DisplayVotes selected={maxIndex} votes={votes} />
+    </div>
   )
 };
 
@@ -49,7 +66,7 @@ const App = () => {
     //console.log("Selected is",selected)
     //console.log("votes before updated:", votes)
     let copyVotes = [...votes]
-    copyVotes[selected] +=1
+    copyVotes[selected] += 1
     //console.log("copyvotes:", copyVotes)
     updateVotes(copyVotes)
     //console.log("votes updated:", votes)
@@ -58,9 +75,10 @@ const App = () => {
   return (
     <div>
       <Anecdote selected={selected} anecdotes={anecdotes} />
-      <DisplayVotes selected={selected} votes={votes}/>
+      <DisplayVotes selected={selected} votes={votes} />
       <Button action={votesCounter} text="vote" />
       <Button action={randomClick} text="next anecdote" />
+      <AnecdoteMostVotes anecdotes={anecdotes} votes={votes} />
     </div>
   )
 }
