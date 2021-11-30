@@ -1,22 +1,27 @@
 import React, { useState } from 'react'
 
-const Display = ({selected,anecdotes}) =>{
-  return(
+const Anecdote = ({ selected, anecdotes }) => {
+  return (
     <p>{anecdotes[selected]}</p>
   )
-}
+};
+
+const DisplayVotes = ({ selected, votes }) => {
+  console.log("Votes current:", selected)
+  return (
+    <p>has {votes[selected]} votes</p>
+  )
+};
 
 const Button = (props) => {
   return (
-    <button onClick={props.randomClick}>
+    <button onClick={props.action}>
       {props.text}
     </button>
   )
 };
 
 const App = () => {
-  const [selected, setSelected] = useState(0)
-
   const anecdotes = [
     'If it hurts, do it more often',
     'Adding manpower to a late software project makes it later!',
@@ -27,22 +32,35 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
   ]
 
+  const [selected, setSelected] = useState(0)
+  const [votes, updateVotes] = useState(Array(anecdotes.length).fill(0))
+
   const randomClick = () => {
     const max = anecdotes.length
     const min = 0
     const randomNumber = parseInt(Math.random() * (max - min) + min)
     //console.log(anecdotes.length)
     //console.log(anecdotes)
-    console.log( randomNumber )
-    return (
-      setSelected(randomNumber)
-    )
+    console.log(randomNumber)
+    setSelected(randomNumber)
+  }
+
+  const votesCounter = () => {
+    //console.log("Selected is",selected)
+    //console.log("votes before updated:", votes)
+    let copyVotes = [...votes]
+    copyVotes[selected] +=1
+    //console.log("copyvotes:", copyVotes)
+    updateVotes(copyVotes)
+    //console.log("votes updated:", votes)
   }
 
   return (
     <div>
-      <Display selected={selected} anecdotes={anecdotes}/>
-      <Button randomClick={randomClick} text="next anecdote" />
+      <Anecdote selected={selected} anecdotes={anecdotes} />
+      <DisplayVotes selected={selected} votes={votes}/>
+      <Button action={votesCounter} text="vote" />
+      <Button action={randomClick} text="next anecdote" />
     </div>
   )
 }
