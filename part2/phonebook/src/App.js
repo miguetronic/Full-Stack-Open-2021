@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
-
-const PersonsDisplay = (props) => {
-  //console.log("PERSONS IS", props)
-  return (
-    <p>{props.person.name} {props.person.number}</p>
-  )
-};
+import Persons from './components/Persons'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -19,7 +15,7 @@ const App = () => {
   const [searchPersons, setSearchPersons] = useState('')
 
   const handleSearchPerson = (event) => {
-    console.log("Search person is:", event.target.value);
+    //console.log("Search person is:", event.target.value);
     setSearchPersons(event.target.value)
   }
 
@@ -29,7 +25,7 @@ const App = () => {
   }
 
   const handleNewNumber = (event) => {
-    console.log(event.target.value);
+    //console.log(event.target.value);
     setNewNumber(event.target.value)
   }
 
@@ -56,28 +52,23 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input onChange={handleSearchPerson} value={searchPersons} />
-      </div>
 
-      <h2>add a new</h2>
+      <Filter handleSearchPerson={handleSearchPerson} searchPersons={searchPersons} />
 
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input onChange={handleNewName} value={newName} />
-        </div>
-        <div>
-          number: <input onChange={handleNewNumber} value={newNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <h3>add a new</h3>
 
-      <h2>Numbers</h2>
-      <div>
-        {personsToShow.map(person => <PersonsDisplay key={person.id} person={person} />)}
-      </div>
+      <PersonForm
+        addPerson={addPerson}
+        handleNewName={handleNewName}
+        newName={newName}
+        handleNewNumber={handleNewNumber}
+        newNumber={newNumber}
+      />
+
+      <h3>Numbers</h3>
+
+      <Persons personsToShow={personsToShow} />
+
     </div>
   )
 }
