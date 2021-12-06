@@ -13,7 +13,7 @@ const App = () => {
   useEffect(() => {
     console.log('effect')
     axios.get('http://localhost:3001/persons')
-      .then(response =>{
+      .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
       })
@@ -44,11 +44,18 @@ const App = () => {
     const nameObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      //id: persons.length + 1
     }
-    setPersons(persons.concat(nameObject));
-    setNewName('');
-    setNewNumber('');
+    axios
+      .post('http://localhost:3001/persons', nameObject)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.concat(response.data));
+        setNewName('');
+        setNewNumber('');
+      })
+
+
   }
 
   const personsToShow = (searchPersons === "")

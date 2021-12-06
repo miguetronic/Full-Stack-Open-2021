@@ -77,9 +77,7 @@ const DisplayCountry = (props) => {
   }
 
   return (
-    <div>
-      hola
-    </div>
+    <div> </div>
   )
 };
 
