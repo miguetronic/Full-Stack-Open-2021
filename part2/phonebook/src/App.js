@@ -43,6 +43,23 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleDelete = (id) => {
+    const message = `Delete ${persons.find(person => person.id === id).name} ?`
+    const confirm = window.confirm(message);
+
+    if (confirm === false) {
+      return
+    }
+
+    axios.delete(`http://localhost:3001/persons/${id}`)
+      .then(response => {
+        console.log(response)
+        const updatePersons = persons.filter(person => person.id !== id)
+        console.log("update persons are:", updatePersons)
+        setPersons(updatePersons)
+      })
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
     //console.log("event is:", event.target.value)
@@ -97,7 +114,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
 
     </div>
   )
