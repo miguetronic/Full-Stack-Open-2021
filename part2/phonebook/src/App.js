@@ -18,13 +18,6 @@ const App = () => {
         console.log('promise fulfilled')
         setPersons(initialPersons)
       })
-
-    /*axios.get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })*/
-
   }, [])
   console.log('render', persons.length, 'persons')
 
@@ -51,7 +44,7 @@ const App = () => {
       return
     }
 
-    axios.delete(`http://localhost:3001/persons/${id}`)
+    personService.deletePerson(id)
       .then(response => {
         console.log(response)
         const updatePersons = persons.filter(person => person.id !== id)
@@ -63,15 +56,29 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     //console.log("event is:", event.target.value)
-    if (persons.some(person => person.name === newName)) {
-      return alert(`${newName} is already added to phonebook`)
-    }
     const nameObject = {
       name: newName,
       number: newNumber,
       //id: persons.length + 1
     }
+    if (persons.some(person => person.name === newName)) {
+      const message = `${newName} is already added to phonebook, replace the old number with a new one?`
+      const confirm = window.confirm(message);
+      const id = persons.find(person => person.name === newName).id
 
+      if (confirm === true) {
+        personService.updatePerson(id, nameObject)
+          .then(response => {
+            console.log("response is:", response)
+            const updatePersons = persons.map(person => person.id === id ? response : person)
+            console.log("Update Persons is: ", updatePersons)
+            setPersons(updatePersons);
+            setNewName('');
+            setNewNumber('');
+          })
+      }
+      return console.log(confirm)
+    }
     personService.createPerson(nameObject)
       .then(newPerson => {
         console.log(newPerson)
@@ -79,17 +86,6 @@ const App = () => {
         setNewName('');
         setNewNumber('');
       })
-
-    /*axios
-      .post('http://localhost:3001/persons', nameObject)
-      .then(response => {
-        console.log(response)
-        setPersons(persons.concat(response.data));
-        setNewName('');
-        setNewNumber('');
-      })*/
-
-
   }
 
   const personsToShow = (searchPersons === "")
