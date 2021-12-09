@@ -5,7 +5,7 @@ const PersonsDisplay = (props) => {
   return (
     <div>
       {props.person.name} {props.person.number}
-      <button onClick={()=>props.handleDelete(props.person.id)}>delete</button>
+      <button onClick={() => props.handleDelete(props.person.id)}>delete</button>
     </div>
   )
 };
@@ -14,7 +14,7 @@ const Persons = (props) => {
   //console.log("Persons component props:",props.persons)
   return (
     <div>
-      {props.personsToShow.map(person => <PersonsDisplay key={person.id} person={person} handleDelete={props.handleDelete}/>)}
+      {props.personsToShow.map(person => <PersonsDisplay key={person.id} person={person} handleDelete={props.handleDelete} />)}
     </div>
   )
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Notification from './components/Notification'
+import { Notification, NotificationError } from './components/Notification'
 import axios from 'axios'
 import personService from './services/persons'
 
@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchPersons, setSearchPersons] = useState('')
   const [successfulMessage, setSuccessfulMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -54,6 +55,9 @@ const App = () => {
         console.log("update persons are:", updatePersons)
         setPersons(updatePersons)
       })
+      .catch(error => {
+        console.log('fail')
+      })
   }
 
   const addPerson = (event) => {
@@ -79,7 +83,16 @@ const App = () => {
             setSuccessfulMessage(`Added ${newName}`)
             setTimeout(() => {
               setSuccessfulMessage(null)
-            }, 2000)
+            }, 3000)
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch(error => {
+            setErrorMessage(`Information of ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 3000)
+            console.log('fail')
             setNewName('');
             setNewNumber('');
           })
@@ -93,9 +106,12 @@ const App = () => {
         setSuccessfulMessage(`Added ${newName}`)
         setTimeout(() => {
           setSuccessfulMessage(null)
-        }, 2000)
+        }, 3000)
         setNewName('');
         setNewNumber('');
+      })
+      .catch(error => {
+        console.log('fail')
       })
   }
 
@@ -106,7 +122,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successfulMessage}/>
+      <Notification message={successfulMessage} />
+      <NotificationError message={errorMessage} />
 
       <Filter handleSearchPerson={handleSearchPerson} searchPersons={searchPersons} />
 
