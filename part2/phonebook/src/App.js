@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import axios from 'axios'
 import personService from './services/persons'
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchPersons, setSearchPersons] = useState('')
+  const [successfulMessage, setSuccessfulMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -27,7 +30,7 @@ const App = () => {
   }
 
   const handleNewName = (event) => {
-    //console.log(event.target.value);
+    //console.log("new name is",event.target.value);
     setNewName(event.target.value);
   }
 
@@ -73,6 +76,10 @@ const App = () => {
             const updatePersons = persons.map(person => person.id === id ? response : person)
             console.log("Update Persons is: ", updatePersons)
             setPersons(updatePersons);
+            setSuccessfulMessage(`Added ${newName}`)
+            setTimeout(() => {
+              setSuccessfulMessage(null)
+            }, 2000)
             setNewName('');
             setNewNumber('');
           })
@@ -83,6 +90,10 @@ const App = () => {
       .then(newPerson => {
         console.log(newPerson)
         setPersons(persons.concat(newPerson));
+        setSuccessfulMessage(`Added ${newName}`)
+        setTimeout(() => {
+          setSuccessfulMessage(null)
+        }, 2000)
         setNewName('');
         setNewNumber('');
       })
@@ -95,6 +106,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successfulMessage}/>
 
       <Filter handleSearchPerson={handleSearchPerson} searchPersons={searchPersons} />
 
